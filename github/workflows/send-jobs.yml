@@ -1,0 +1,29 @@
+name: Daily Job Email
+
+on:
+  schedule:
+    - cron: "30 14 * * *"  # 8:00 PM IST
+  workflow_dispatch:
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Job Script
+        run: npm start
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          TARGET_EMAIL: ${{ secrets.TARGET_EMAIL }}
